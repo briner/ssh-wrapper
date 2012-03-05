@@ -1,0 +1,10 @@
+2012.03.04 Cédric BRINER
+mount the error of the invoked script to the ssh, so that error can be seen
+within the ssh client
+
+2012.01.30 Cédric BRINER
+rework the version at
+https://obswww.unige.ch/obswiki/ssh#fine_control_with_authorized_keys2_.26_ssh-wrapper
+by strongly simplifying the code, and allow a mode where the script can learn
+the command which sould be authorized
+

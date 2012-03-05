@@ -1,0 +1,42 @@
+#!/usr/bin/python
+
+# Documentation: all the documentation is on :
+# https://github.com/briner/ssh-wrapper/blob/master/README
+
+
+IS_LEARNING=True
+
+
+import os,sys
+import re, subprocess
+
+
+if __name__=='__main__':
+    if len(sys.argv) != 2 :
+        sys.exit(1)
+    else:
+        user_at_node=sys.argv[1]
+#
+# attention ssh_wrapper_allowd_command must reside where ssh_wrapper is
+
+from ssh_wrapper_allowed_command import dallow
+list_allow_command=dallow.get(user_at_node,[])
+
+try:
+    command=os.environ['SSH_ORIGINAL_COMMAND']
+except:
+    sys.exit(1)   
+
+#
+# clean the command by removing tab, double space and so on 
+command=re.sub('\s+', ' ', command.strip())
+
+#
+# check if we have the right to launch this command. If so, do it
+if command in list_allow_command:
+    error_code=subprocess.call(command, shell=True)
+    sys.exit(error_code)
+else:
+    if IS_LEARNING:
+        sys.stderr.write("add this to list_allow_command:'%s'\n" % command)
+        sys.exit(1)
